@@ -1,57 +1,61 @@
-import {observable, autorun, action, runInAction} from 'mobx'
-
-// console.log('it works')
+import {observable, autorun, action, runInAction, when, reaction, computed} from 'mobx'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const waitForPromise = () => new Promise(resolve => setTimeout(resolve, 1000))
 
-// const person = observable({
-//     firstName: 'Mob',
-//     lastName: 'X'
-// })
-//
-// console.log(`Person is `, person)
-
 class Person {
     @observable
-    firstName: string;
+    firstName: string = ''
     @observable
-    lastName: string
+    lastName: string = ''
+    @observable
+    age: number = 18
+    @observable
+    isAlive: boolean = true
+    @observable
+    dollars: number = 250
 
-    constructor(name: string, lastName: string) {
-        this.firstName = name
-        this.lastName = lastName
+    constructor(props: Partial<Person>) {
+        Object.assign(this, props)
+
+        when(
+            () => this.age > 99,
+            () => this.bury()
+        )
     }
 
-    // @action
-    // updateFirstName(name: string) {
-    //     this.firstName = name
-    // }
-    //
-    // @action
-    // updateLastName(name: string) {
-    //     this.lastName = name
-    // }
+    @action
+    bury() {
+        this.isAlive = false
+    }
+
+    @action
+    setAge(age: number) {
+        this.age = age
+    }
+
+    @computed
+    get uah() {
+        console.log('calculation')
+        return this.dollars * 28
+    }
 }
 
-const newPerson = new Person('New', 'Person')
-
-autorun(async() => {
-    console.log(`Person name is: ${newPerson.firstName} ${newPerson.lastName}`)
+const newPerson = new Person({
+    firstName: 'New',
+    lastName: 'Person',
 })
 
-// newPerson.updateFirstName(' 1')
-// newPerson.updateLastName(' 2')
-
-runInAction( () => {
-    newPerson.firstName = 'runInAction first'
-    newPerson.lastName = 'runInAction last'
+autorun(async () => {
+    console.log(`Person is: ${newPerson.firstName} ${newPerson.lastName} ${newPerson.age}-${newPerson.isAlive}`)
+    console.log(`Person uah: ${newPerson.uah} `)
 })
 
-// const updated = action(() => {
-//     newPerson.firstName = 'Action name'
-// })
-//
-// updated()
+reaction(
+    () => !newPerson.isAlive,
+    () => console.log('RIP')
+)
+
+newPerson.setAge(100)
 
 export {};
