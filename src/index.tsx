@@ -5,15 +5,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'mobx-react-lite'
 
-import {StoreProvider} from './stores/helpers/store-context'
-import createStore from "./stores/helpers/create-store";
+import {StoreProvider} from './helpers/store-context'
+import {TodoList} from "./stores/todo-list";
 
-const rootStore = createStore()
+const todoList = new TodoList([
+    'Should Starting Writing in React',
+    'Should Learn MobX',
+    'Should Watch Once Piece :)'
+]);
 
-console.log('rootStore', rootStore)
+//@ts-ignore - for debugging
+window.todoList = todoList
 
 ReactDOM.render(
-    <StoreProvider value={rootStore}>
+    <StoreProvider value={todoList}>
         <App/>
     </StoreProvider>,
     document.getElementById('root')

@@ -1,21 +1,15 @@
 import React from 'react';
 import './App.css';
-import './data-structure-example'
-import Test from "./Test";
+import {TodoList} from "./features/TodoList";
+import {TodoNew} from "./features/TodoNew";
 
-import {observer} from 'mobx-react-lite'
-import useStore from "./stores/helpers/use-store";
-
-function App() {
-    const {dataStore: {todoStore}} = useStore()
-
+const App = () => {
     return (
-        <div className='App'>
-            <Test/>
-            {todoStore.todoList.map(todo => <div key={todo.id}>{todo.name}</div>)}
+        <div className="App">
+            <TodoNew/>
+            <TodoList/>
         </div>
-
     );
 }
 
-export default observer(App);
+export default App;
