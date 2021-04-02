@@ -14,10 +14,10 @@ class User {
         this.rootStore = rootStore
     }
 
-    @computed
+    /*@computed
     get todos() {
         this.rootStore.dataStore.todoStore.getUserTodos(this.id)
-    }
+    }*/
 }
 
 export default class UserStore {
@@ -41,12 +41,12 @@ export default class UserStore {
         return this.usersList.find(user => user.name === name)
     }
 
-    @action
+    /*@action
     removeUser(name: string) {
         const user = this.getUser(name)
 
         if (user) {
             user.todos.forEach(todo => this.rootStore.dataStore.todoStore.removeTodo(todo.name))
         }
-    }
+    }*/
 }

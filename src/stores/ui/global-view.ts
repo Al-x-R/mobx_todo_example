@@ -6,9 +6,9 @@ export default class GlobalView {
     themeColor: string = 'grey'
 
     constructor(rootStore: RootStore) {
-        autorun(() => {
+        /*autorun(() => {
             console.log(rootStore.dataStore.todoStore.list.length)
-        })
+        })*/
     }
 
 }

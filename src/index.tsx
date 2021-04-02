@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'mobx-react-lite'
 
-import './test'
 import RootStore from "./stores/root-store";
 
 const rootStore = new RootStore()
