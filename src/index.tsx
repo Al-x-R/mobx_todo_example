@@ -5,17 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'mobx-react-lite'
 
-import RootStore from "./stores/root-store";
+import {StoreProvider} from './stores/helpers/store-context'
+import createStore from "./stores/helpers/create-store";
 
-const rootStore = new RootStore()
+const rootStore = createStore()
 
 console.log('rootStore', rootStore)
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <StoreProvider value={rootStore}>
+        <App/>
+    </StoreProvider>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

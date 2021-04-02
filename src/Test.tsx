@@ -6,13 +6,12 @@ import {useObserver, observer} from 'mobx-react-lite'
 // const todo = new Todo('title', userId, new TodoStore())
 
 const Test = observer(() => {
-    console.log(todo.name)
     return (
-        <div>
+        /*<div>
             <div>{todo.name}</div>
             <button onClick={() => todo.updateName('First name')}>First name</button>
             <button onClick={() => todo.updateName('Last name')}>Last name</button>
-        </div>
+        </div>*/
     )
 })
 
