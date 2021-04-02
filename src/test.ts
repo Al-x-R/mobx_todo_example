@@ -1,61 +1,92 @@
-import {observable, autorun, action, runInAction, when, reaction, computed} from 'mobx'
+import {action, computed, observable, reaction, when} from 'mobx'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const waitForPromise = () => new Promise(resolve => setTimeout(resolve, 1000))
+let runningId = 0
 
-class Person {
-    @observable
-    firstName: string = ''
-    @observable
-    lastName: string = ''
-    @observable
-    age: number = 18
-    @observable
-    isAlive: boolean = true
-    @observable
-    dollars: number = 250
+class Todo {
+    id: number = runningId++
 
-    constructor(props: Partial<Person>) {
-        Object.assign(this, props)
+    @observable
+    name: string = ''
+    @observable
+    isCompleted: boolean = false
 
-        when(
-            () => this.age > 99,
-            () => this.bury()
+    disposer: () => void
+
+    constructor(name: string) {
+        this.name = name
+
+        this.disposer = reaction(
+            () => this.isCompleted,
+            () => console.log(
+                `Todo ${this.name} is ${this.isCompleted ? 'Done' : 'Incomplete'}`
+            )
         )
     }
 
     @action
-    bury() {
-        this.isAlive = false
+    updateName(name: string) {
+        this.name = name
     }
 
     @action
-    setAge(age: number) {
-        this.age = age
+    toggledTodo() {
+        this.isCompleted = !this.isCompleted
     }
 
-    @computed
-    get uah() {
-        console.log('calculation')
-        return this.dollars * 28
+    dispose() {
+        this.disposer()
     }
 }
 
-const newPerson = new Person({
-    firstName: 'New',
-    lastName: 'Person',
-})
+class TodoList {
+    @observable
+    list: Todo[] = []
 
-autorun(async () => {
-    console.log(`Person is: ${newPerson.firstName} ${newPerson.lastName} ${newPerson.age}-${newPerson.isAlive}`)
-    console.log(`Person uah: ${newPerson.uah} `)
-})
+    constructor() {
+        reaction(
+            () => this.list.length,
+            () => {
+                console.log(`Total: ${this.list.length}, Completed: ${this.completed.length}, 
+                Incomplete ${this.inComplete.length}`)
+            }
+        )
 
-reaction(
-    () => !newPerson.isAlive,
-    () => console.log('RIP')
-)
+        when(
+            () => this.list.length > 0 && this.list.every(todo => todo.isCompleted),
+            () => console.log('Amazing Work')
+        )
+    }
 
-newPerson.setAge(100)
+    @action
+    addTodo(name: string) {
+        this.list.push(new Todo(name))
+    }
 
-export {};
+    @action
+    removeTodo(name: string) {
+        const todo = this.list.find(todo => todo.name === name)
+
+        if (todo) {
+            todo.dispose()
+            const todoIndex = this.list.indexOf(todo)
+            this.list.splice(todoIndex, 1)
+        }
+    }
+
+    @computed
+    get completed() {
+        return this.list.filter(todo => todo.isCompleted)
+    }
+
+    @computed
+    get inComplete() {
+        return this.list.filter(todo => !todo.isCompleted)
+    }
+
+}
+
+const todoList = new TodoList()
+
+todoList.addTodo('first')
+
+// export {};

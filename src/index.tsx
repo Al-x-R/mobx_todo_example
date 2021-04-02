@@ -6,6 +6,11 @@ import reportWebVitals from './reportWebVitals';
 import 'mobx-react-lite'
 
 import './test'
+import RootStore from "./stores/root-store";
+
+const rootStore = new RootStore()
+
+console.log('rootStore', rootStore)
 
 ReactDOM.render(
   <React.StrictMode>
