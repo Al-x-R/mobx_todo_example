@@ -1,4 +1,4 @@
-import {observable} from 'mobx'
+import {observable, autorun, action,} from 'mobx'
 
 console.log('it works')
 
@@ -16,10 +16,17 @@ class Person {
     constructor(name: string) {
         this.firstName = name
     }
+
+    @action
+    updateFirstName(name: string) {
+        this.firstName = name
+    }
 }
 
 const newPerson = new Person('new name')
 
-console.log('new person is ', newPerson)
+autorun(() => {
+    console.log(`Person name is ${newPerson.firstName}`)
+})
 
 export {};
