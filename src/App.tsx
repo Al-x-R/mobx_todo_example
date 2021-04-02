@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import './data-structure-example'
 
 function App() {
   return (
